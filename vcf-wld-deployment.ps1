@@ -1,12 +1,14 @@
-# Author: William Lam
+# Forked from author: William Lam
 # Website: www.williamlam.com
 
-$sddcManagerFQDN = "FILL_ME_IN"
-$sddcManagerUsername = "FILL_ME_IN"
-$sddcManagerPassword = "FILL_ME_IN"
+# Personal adaption of William Lam's VCF Automated Deployment scripts for a single Dell T7920
+
+$sddcManagerFQDN = "vcf-mgmt1-sddcmgmt1.lab.blaz.tech"
+$sddcManagerUsername = "administrator@vsphere.local"
+$sddcManagerPassword = "VMware1!"
 
 # License Later feature only applicable for VCF 5.1.1 and later
-$LicenseLater = $true
+$LicenseLater = $false
 $ESXILicense = ""
 $VSANLicense = ""
 $NSXLicense = ""
@@ -23,25 +25,25 @@ $VLCMImageName = "Management-Domain-ESXi-Personality" # Ensure this label matche
 $EnableVSANESA = $false
 
 # vCenter Configuration
-$VCSAHostname = "vcf-w01-vc01"
-$VCSAIP = "172.17.31.120"
+$VCSAHostname = "vcf-wld1-vc1.lab.blaz.tech"
+$VCSAIP = "10.0.1.30"
 $VCSARootPassword = "VMware1!"
 
 # NSX Configuration
-$NSXManagerVIPHostname = "vcf-w01-nsx01"
-$NSXManagerVIPIP = "172.17.31.121"
-$NSXManagerNode1Hostname = "vcf-m01-nsx01a"
-$NSXManagerNode1IP = "172.17.31.122"
-$NSXManagerNode2Hostname = "vcf-m01-nsx01b"
-$NSXManagerNode2IP = "172.17.31.123"
-$NSXManagerNode3Hostname = "vcf-m01-nsx01c"
-$NSXManagerNode3IP = "172.17.31.124"
+$NSXManagerVIPHostname = "vcf-wld1-nsx1"
+$NSXManagerVIPIP = "10.0.1.50"
+$NSXManagerNode1Hostname = "vcf-wld1-nsx1a"
+$NSXManagerNode1IP = "10.0.1.51"
+$NSXManagerNode2Hostname = "vcf-wld1-nsx1b"
+$NSXManagerNode2IP = "10.0.1.52"
+$NSXManagerNode3Hostname = "vcf-wld1-nsx1c"
+$NSXManagerNode3IP = "10.0.1.53"
 $NSXAdminPassword = "VMware1!VMware1!"
 $SeparateNSXSwitch = $false
 
 $VMNetmask = "255.255.255.0"
-$VMGateway = "172.17.31.1"
-$VMDomain = "tshirts.inc"
+$VMGateway = "10.0.1.1"
+$VMDomain = "lab.blaz.tech"
 
 #### DO NOT EDIT BEYOND HERE ####
 

@@ -1,14 +1,16 @@
-# Author: William Lam
+# Forked from author: William Lam
 # Website: www.williamlam.com
 
+# Personal adaption of William Lam's VCF Automated Deployment scripts for a single Dell T7920
+
 # vCenter Server used to deploy VMware Cloud Foundation Lab
-$VIServer = "FILL-ME-IN"
-$VIUsername = "FILL-ME-IN"
-$VIPassword = "FILL-ME-IN"
+$VIServer = "vcsa.lab.blaz.tech"
+$VIUsername = "administrator@vsphere.local"
+$VIPassword = "VMware1!"
 
 # Full Path to both the Nested ESXi & Cloud Builder OVA
-$NestedESXiApplianceOVA = "/root/Nested_ESXi8.0u3_Appliance_Template_v1.ova"
-$CloudBuilderOVA = "/root/VMware-Cloud-Builder-5.2.1.0-24307856_OVF10.ova"
+$NestedESXiApplianceOVA = "/Users/corey/Downloads/Nested_ESXi8.0u3b_Appliance_Template_v1.ova"
+$CloudBuilderOVA = "/Users/corey/Downloads/VMware-Cloud-Builder-5.2.1.0-24307856_OVF10.ova"
 
 # VCF Licenses or leave blank for evaluation mode (requires VCF 5.1.1 or later)
 $VCSALicense = ""
@@ -23,16 +25,16 @@ $VCFWorkloadDomainUIJSONFile = "vcf-commission-host-ui.json"
 $VCFWorkloadDomainAPIJSONFile = "vcf-commission-host-api.json"
 
 # Cloud Builder Configurations
-$CloudbuilderVMHostname = "vcf-m01-cb01"
-$CloudbuilderFQDN = "vcf-m01-cb01.tshirts.inc"
-$CloudbuilderIP = "172.17.31.180"
+$CloudbuilderVMHostname = "vcf-mgmt1-cb1"
+$CloudbuilderFQDN = "vcf-m01-cb01.lab.blaz.tech"
+$CloudbuilderIP = "10.0.1.199"
 $CloudbuilderAdminUsername = "admin"
 $CloudbuilderAdminPassword = "VMw@re123!VMw@re123!"
 $CloudbuilderRootPassword = "VMw@re123!VMw@re123!"
 
 # SDDC Manager Configuration
-$SddcManagerHostname = "vcf-m01-sddcm01"
-$SddcManagerIP = "172.17.31.181"
+$SddcManagerHostname = "vcf-mgmt1-sddcmgmt1"
+$SddcManagerIP = "10.0.1.12"
 $SddcManagerVcfPassword = "VMware1!VMware1!"
 $SddcManagerRootPassword = "VMware1!VMware1!"
 $SddcManagerRestPassword = "VMware1!VMware1!"
@@ -40,70 +42,70 @@ $SddcManagerLocalPassword = "VMware1!VMware1!"
 
 # Nested ESXi VMs for Management Domain
 $NestedESXiHostnameToIPsForManagementDomain = @{
-    "vcf-m01-esx01"   = "172.17.31.185"
-    "vcf-m01-esx02"   = "172.17.31.186"
-    "vcf-m01-esx03"   = "172.17.31.187"
-    "vcf-m01-esx04"   = "172.17.31.188"
+    "vcf-mgmt1-esxi1"   = "10.0.1.21"
+    "vcf-mgmt1-esxi2"   = "10.0.1.22"
+    "vcf-mgmt1-esxi3"   = "10.0.1.23"
+    "vcf-mgmt1-esxi4"   = "10.0.1.24"
 }
 
 # Nested ESXi VMs for Workload Domain
 $NestedESXiHostnameToIPsForWorkloadDomain = @{
-    "vcf-m01-esx05"   = "172.17.31.189"
-    "vcf-m01-esx06"   = "172.17.31.190"
-    "vcf-m01-esx07"   = "172.17.31.191"
-    "vcf-m01-esx08"   = "172.17.31.192"
+    "vcf-wld1-esxi1"   = "10.0.1.31"
+    "vcf-wld1-esxi2"   = "10.0.1.32"
+    "vcf-wld1-esxi3"   = "10.0.1.33"
+    "vcf-wld1-esxi4"   = "10.0.1.34"
 }
 
 # Nested ESXi VM Resources for Management Domain
 $NestedESXiMGMTvCPU = "12"
-$NestedESXiMGMTvMEM = "78" #GB
+$NestedESXiMGMTvMEM = "96" #GB
 $NestedESXiMGMTCachingvDisk = "4" #GB
-$NestedESXiMGMTCapacityvDisk = "500" #GB
+$NestedESXiMGMTCapacityvDisk = "1000" #GB
 $NestedESXiMGMTBootDisk = "32" #GB
 
 # Nested ESXi VM Resources for Workload Domain
 $NestedESXiWLDVSANESA = $false
 $NestedESXiWLDvCPU = "8"
-$NestedESXiWLDvMEM = "36" #GB
+$NestedESXiWLDvMEM = "48" #GB
 $NestedESXiWLDCachingvDisk = "4" #GB
 $NestedESXiWLDCapacityvDisk = "250" #GB
 $NestedESXiWLDBootDisk = "32" #GB
 
 # ESXi Network Configuration
-$NestedESXiManagementNetworkCidr = "172.17.31.0/24" # should match $VMNetwork configuration
-$NestedESXivMotionNetworkCidr = "172.17.32.0/24"
-$NestedESXivSANNetworkCidr = "172.17.33.0/24"
-$NestedESXiNSXTepNetworkCidr = "172.17.34.0/24"
+$NestedESXiManagementNetworkCidr = "10.0.1.0/24" # should match $VMNetwork configuration
+$NestedESXivMotionNetworkCidr = "10.0.2.0/24"
+$NestedESXivSANNetworkCidr = "10.0.3.0/24"
+$NestedESXiNSXTepNetworkCidr = "10.0.4.0/24"
 
 # vCenter Configuration
-$VCSAName = "vcf-m01-vc01"
-$VCSAIP = "172.17.31.182"
+$VCSAName = "vcf-mgmt1-vc1"
+$VCSAIP = "10.0.1.20"
 $VCSARootPassword = "VMware1!"
 $VCSASSOPassword = "VMware1!"
 $EnableVCLM = $true
 
 # NSX Configuration
 $NSXManagerSize = "medium"
-$NSXManagerVIPHostname = "vcf-m01-nsx01"
-$NSXManagerVIPIP = "172.17.31.183"
-$NSXManagerNode1Hostname = "vcf-m01-nsx01a"
-$NSXManagerNode1IP = "172.17.31.184"
+$NSXManagerVIPHostname = "vcf-mgmt1-nsx1"
+$NSXManagerVIPIP = "10.0.1.40"
+$NSXManagerNode1Hostname = "vcf-mgmt1-nsx1a"
+$NSXManagerNode1IP = "10.0.1.41"
 $NSXRootPassword = "VMware1!VMware1!"
 $NSXAdminPassword = "VMware1!VMware1!"
 $NSXAuditPassword = "VMware1!VMware1!"
 
 # General Deployment Configuration for Nested ESXi & Cloud Builder VM
-$VMDatacenter = "San Jose"
-$VMCluster = "Compute Cluster"
-$VMNetwork = "sjc-comp-mgmt (1731)"
-$VMDatastore = "comp-vsanDatastore"
+$VMDatacenter = "Lab"
+$VMCluster = "T7920"
+$VMNetwork = "MGMT-DPortGroup"
+$VMDatastore = "MGMT1"
 $VMNetmask = "255.255.255.0"
-$VMGateway = "172.17.31.1"
-$VMDNS = "172.17.31.2"
-$VMNTP = "172.17.31.2"
+$VMGateway = "10.0.1.1"
+$VMDNS = "192.168.1.8"
+$VMNTP = "192.168.1.8"
 $VMPassword = "VMware1!"
-$VMDomain = "tshirts.inc"
-$VMSyslog = "172.17.31.182"
+$VMDomain = "lab.blaz.tech"
+$VMSyslog = "10.0.1.3"
 $VMFolder = "VCF"
 
 #### DO NOT EDIT BEYOND HERE ####
@@ -114,12 +116,12 @@ $VAppName = "Nested-VCF-Lab-$random_string"
 $SeparateNSXSwitch = $false
 $VCFVersion = ""
 
-$preCheck = 1
-$confirmDeployment = 1
-$deployNestedESXiVMsForMgmt = 1
-$deployNestedESXiVMsForWLD = 1
+$preCheck = 0
+$confirmDeployment = 0
+$deployNestedESXiVMsForMgmt = 0
+$deployNestedESXiVMsForWLD = 0
 $deployCloudBuilder = 1
-$moveVMsIntovApp = 1
+$moveVMsIntovApp = 0
 $generateMgmJson = 1
 $startVCFBringup = 1
 $generateWldHostCommissionJson = 1
@@ -294,6 +296,29 @@ if($deployNestedESXiVMsForMgmt -eq 1) {
         $ovfconfig.common.guestinfo.password.value = $VMPassword
         $ovfconfig.common.guestinfo.ssh.value = $true
 
+        # Set proper datastore for nested MGMT host
+        switch ($VMName) {
+            'vcf-mgmt1-esxi1' {
+                My-Logger "Using MGMT1 datastore ..."
+                $datastore = "MGMT1"
+            }
+            'vcf-mgmt1-esxi2' {
+                My-Logger "Using MGMT2 datastore ..."
+                $datastore = "MGMT2"
+            }
+            'vcf-mgmt1-esxi3' {
+                My-Logger "Using MGMT3 datastore ..."
+                $datastore = "MGMT3"
+            }
+            'vcf-mgmt1-esxi4' {
+                My-Logger "Using MGMT4 datastore ..."
+                $datastore = "MGMT4"
+            }  
+            Default {
+                My-Logger "No MGMT datastore match!!!"
+            }
+        }
+        
         My-Logger "Deploying Nested ESXi VM $VMName ..."
         $vm = Import-VApp -Source $NestedESXiApplianceOVA -OvfConfiguration $ovfconfig -Name $VMName -Location $VMCluster -VMHost $vmhost -Datastore $datastore -DiskStorageFormat thin
 
@@ -347,6 +372,29 @@ if($deployNestedESXiVMsForWLD -eq 1) {
         $ovfconfig.common.guestinfo.syslog.value = $VMSyslog
         $ovfconfig.common.guestinfo.password.value = $VMPassword
         $ovfconfig.common.guestinfo.ssh.value = $true
+
+        # Set proper datastore for nested WLD host
+        switch ($VMName) {
+            'vcf-wld1-esxi1' {
+                My-Logger "Using WLD1 datastore ..."
+                $datastore = "WLD1"
+            }
+            'vcf-wld1-esxi2' {
+                My-Logger "Using WLD2 datastore ..."
+                $datastore = "WLD2"
+            }
+            'vcf-wld1-esxi3' {
+                My-Logger "Using WLD3 datastore ..."
+                $datastore = "WLD3"
+            }
+            'vcf-wld1-esxi4' {
+                My-Logger "Using WLD4 datastore ..."
+                $datastore = "WLD4"
+            }  
+            Default {
+                My-Logger "No WLD datastore match!!!"
+            }
+        }
 
         My-Logger "Deploying Nested ESXi VM $VMName ..."
         $vm = Import-VApp -Source $NestedESXiApplianceOVA -OvfConfiguration $ovfconfig -Name $VMName -Location $VMCluster -VMHost $vmhost -Datastore $datastore -DiskStorageFormat thin
